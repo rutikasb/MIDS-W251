@@ -5,7 +5,10 @@
 
 ## Running containers on TX2
 
-### Build the following images for 1. face detector 2. MQTT Broker 3. MQTT message forwarder
+### Build the following images for
+1. Face detector and publisher
+2. MQTT Broker
+3. MQTT message forwarder
 ```
 docker build -t detector -f face_detector/Dockerfile .
 docker build -t broker -f mqtt_broker/Dockerfile .
