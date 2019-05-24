@@ -1,7 +1,7 @@
 # Homework 3 - Internet of Things 101
 
 ## Overall architecture/flow
-![flow](how03.png)
+![flow](hw03.png)
 
 ## Running containers on TX2
 
