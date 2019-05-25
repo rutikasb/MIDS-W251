@@ -9,10 +9,12 @@ RUN apt-get update \
     git \
     python-pip \
     python-setuptools \
-    python-dev
+    python-dev \
+    python-opencv
 
 RUN pip install wheel
 RUN pip install numpy
 RUN pip install paho-mqtt
 # for IBM boto3
 RUN pip install ibm-cos-sdk
+RUN pip install image

@@ -5,13 +5,16 @@ import cv2
 import paho.mqtt.client as mqtt
 import time
 
+MQTT_BROKER = "broker"
+MQTT_TOPIC = "faces"
+
 # 1 should correspond to /dev/video1, the USB camera. The 0 is reserved for the TX2 onboard camera
 cap = cv2.VideoCapture(1)
 print("Is cap opened:", cap.isOpened())
 
 # create mqtt client for publishing
 mqttc = mqtt.Client()
-mqttc.connect("broker", port=1883)
+mqttc.connect(MQTT_BROKER, port=1883)
 
 # pre-trained frontal face HAAR Cascade Classifier 
 face_cascade = cv2.CascadeClassifier('/opt/opencv/data/haarcascades/haarcascade_frontalface_default.xml')
@@ -38,7 +41,7 @@ while(True):
             msg = jpg.tobytes()
             # forward to mqtt broker on jetson
             print("publishing message")
-            mqttc.publish("faces", msg)
+            mqttc.publish(MQTT_TOPIC, msg, qos=0, retain=False)
             # cv2.imshow('img', gray_img)
 
     if cv2.waitKey(1) & 0xFF == ord('q'):

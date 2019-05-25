@@ -23,7 +23,7 @@ docker network create --driver bridge hw03
 # launch the detector container and run the python script to capture images
 # from USB cam and publish it to the broker
 xhost local:root
-docker run --name detector -e DISPLAY=$DISPLAY --privileged -v /tmp:/tmp --device /dev/video1 -t detector
+docker run --name detector -e DISPLAY=$DISPLAY --privileged --network hw03 -v /tmp:/tmp --device /dev/video1 -t detector
 docker cp face_detector/detector.py detector:/home/detector.py
 docker exec detector /bin/sh -c "python /home/detector.py"
 
@@ -33,13 +33,34 @@ docker run --name broker --network hw03 -p 1883:1883 -t broker
 
 
 # launch the MQTT message forwarder and subscribe to the topic
-docker run --name broker --network hw03 -p 1883:1883 -ti forwarder
+docker run --name forwarder --network hw03 -ti forwarder
 mosquitto_sub -h broker -t faces
 ```
 
 
-### Setting up cloud environment
+## Setting up cloud environment
 
 1. For running the containers on the VMs, the VM setup in week 02 was used
 2. An Object Storage was created via the IBM cloud console
-	1. 
+
+Git clone this repository on the remote VM and build a docker network of 2 containers - mqtt broker and image saver/uploader
+
+### Build images:
+```
+docker build -t broker -f mqtt_broker/Dockerfile .
+docker build -t image_saver -f image_saver/Dockerfile .
+```
+
+### Launch conainers in a network
+```
+# create a bridge
+docker network create --driver bridge hw03
+
+# launch the MQTT broker container
+docker run --name broker --network hw03 -p 1883:1883 -ti broker
+
+# run the subscriber/image saver
+docker run --name image_saver --network hw03 -t image_saver
+docker cp image_saver/saver.py image_saver:/home/
+docker exec image_saver /bin/sh -c "python /home/saver.py"
+```
