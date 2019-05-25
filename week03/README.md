@@ -36,3 +36,10 @@ docker run --name broker --network hw03 -p 1883:1883 -t broker
 docker run --name broker --network hw03 -p 1883:1883 -ti forwarder
 mosquitto_sub -h broker -t faces
 ```
+
+
+### Setting up cloud environment
+
+1. For running the containers on the VMs, the VM setup in week 02 was used
+2. An Object Storage was created via the IBM cloud console
+	1. 

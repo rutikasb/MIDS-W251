@@ -9,12 +9,10 @@ RUN apt-get update \
     git \
     python-pip \
     python-setuptools \
-    python-dev \
-    python-opencv
+    python-dev
 
 RUN pip install wheel
 RUN pip install numpy
 RUN pip install paho-mqtt
-
-# Clone opencv project
-RUN cd /opt && git clone https://github.com/opencv/opencv.git
+# for IBM boto3
+RUN pip install ibm-cos-sdk
