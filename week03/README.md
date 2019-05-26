@@ -65,3 +65,8 @@ docker run --name image_saver --network hw03 -t image_saver
 docker cp image_saver/saver.py image_saver:/home/
 docker exec image_saver /bin/sh -c "python /home/saver.py"
 ```
+
+
+## Publishing
+
+All the messages were published with qos=0 which publishes a message at most once. The recipient does not acknowledge receipt of the message and the message is not stored and re-transmitted. Since we're publishing images every second, it's okay if all messages are not delivered and we can afford to lose some data.
