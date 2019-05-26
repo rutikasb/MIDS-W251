@@ -17,4 +17,4 @@ RUN pip install numpy
 RUN pip install paho-mqtt
 # for IBM boto3
 RUN pip install ibm-cos-sdk
-RUN pip install image
+RUN pip install Pillow

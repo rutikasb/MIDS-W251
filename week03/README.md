@@ -34,7 +34,8 @@ docker run --name broker --network hw03 -p 1883:1883 -t broker
 
 # launch the MQTT message forwarder and subscribe to the topic
 docker run --name forwarder --network hw03 -ti forwarder
-mosquitto_sub -h broker -t faces
+docker cp mqtt_forwarder/forwarder.py forwarder:/home/
+docker exec forwarder /bin/sh -c "python /home/forwarder.py"
 ```
 
 

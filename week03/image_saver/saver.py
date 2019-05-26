@@ -1,9 +1,11 @@
 #!/usr/bin/env python
 
+import os, sys
 import paho.mqtt.client as mqtt
 import ibm_boto3
 import time
 import traceback
+import cv2
 from io import BytesIO
 from PIL import Image
 from ibm_botocore.client import Config
@@ -39,12 +41,18 @@ resource = ibm_boto3.resource('s3', ibm_api_key_id=creds['apikey'], ibm_service_
 def on_message(client, userdata, message):
     print("Message received")
     try:
+        # convert the byte array to jpg image and upload to object storage
+        key = str(time.time()) + ".jpg"
+        img_path = "/home/" + key
         img = Image.open(BytesIO(message.payload))
-        img_name = str(time.time()) + ".jpg"
-        print("Uploading to S3")
-        resource.Bucket(BUCKET_NAME).put_object(Key=img_name, Body=img)
-    except Exception:
-        traceback.print_exec()
+        img.save(img_path)
+        resource.meta.client.upload_file(img_path, "rutika-hw03", key)
+        os.remove(img_path)
+        print("--------------")
+    except:
+        print("Exception")
+        os.remove(img_path)
+        traceback.print_exc(file=sys.stdout)
 
 def on_connect(client, userdata, flags, rc):
     if rc == 0:
